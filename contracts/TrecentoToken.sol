@@ -19,9 +19,9 @@ import "./tokens/Token.sol";
 import "./tokens/TokenLogic.sol";
 
 
-contract TecentoTokenLogic is TokenLogic {
+contract TrecentoTokenLogic is TokenLogic {
 
-    function TecentoTokenLogic(
+    function TrecentoTokenLogic(
         address token_,
         address tokenData_,
         address rolesContract,
@@ -42,7 +42,7 @@ contract TecentoTokenLogic is TokenLogic {
     }
 
     function mintFor(address, uint256) public tokenOnly {
-        // no more TecentoTokens can be minted after the initial mint
+        // no more TrecentoTokens can be minted after the initial mint
         assert(false);
     }
 
@@ -53,8 +53,8 @@ contract TecentoTokenLogic is TokenLogic {
 }
 
 
-contract TecentoToken is Token {
-    function TecentoToken(string name_, string symbol_, address rolesContract) public Token(name_, symbol_, rolesContract) {
+contract TrecentoToken is Token {
+    function TrecentoToken(string name_, string symbol_, address rolesContract) public Token(name_, symbol_, rolesContract) {
         // you shouldn't create logic here, because this contract would be the owner.
     }
 

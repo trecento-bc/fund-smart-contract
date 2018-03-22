@@ -17,8 +17,8 @@
 let utils = require('.//utils')
 
 var TokenLogic = artifacts.require('TokenLogic')
-var TecentoTokenLogic = artifacts.require('TecentoTokenLogic')
-var TRC = artifacts.require('TecentoToken')
+var TrecentoTokenLogic = artifacts.require('TrecentoTokenLogic')
+var TRC = artifacts.require('TrecentoToken')
 var TEX = artifacts.require('ExchangeToken')
 var Roles = artifacts.require('Roles')
 
@@ -49,11 +49,11 @@ module.exports = function (deployer, network) {
       .then(s => {
         trc = s
         return deployer.deploy(
-          TecentoTokenLogic, trc.address, 0, Roles.address,
+          TrecentoTokenLogic, trc.address, 0, Roles.address,
           [accounts[0], accounts[12], accounts[13], accounts[14], accounts[15]],
           [1e25, 1e25, 2e25, 3e25, 3e25])
       })
-      .then(() => trc.setLogic(TecentoTokenLogic.address))
+      .then(() => trc.setLogic(TrecentoTokenLogic.address))
       .then(() => utils.setRole(trc, roles, 'admin'))
   }
 
