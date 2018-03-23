@@ -35,8 +35,8 @@ contract('Roles', function (accounts) {
   })
 
   it('can add a new role for the contract', async () => {
-    await roles.addContractRole(contractHash, 'newRole')
-    assert.ok(await roles.hasRole('newRole'))
+    await roles.addContractRole(contractHash, 'admin')
+    assert.ok(await roles.hasRole('admin'))
   })
 
   it('can grant a role to a user in the contract', async () => {
