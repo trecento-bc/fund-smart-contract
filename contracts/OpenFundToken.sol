@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pragma solidity ^0.4.17;
+pragma solidity ^0.4.19;
 
 
 import "./tokens/Token.sol";
 import "./tokens/TokenLogic.sol";
 
 
-contract TrecentoTokenLogic is TokenLogic {
+contract OpenFundTokenLogic is TokenLogic {
 
-    function TrecentoTokenLogic(
+    function OpenFundTokenLogic(
         address token_,
         address tokenData_,
         address rolesContract,
@@ -42,7 +42,7 @@ contract TrecentoTokenLogic is TokenLogic {
     }
 
     function mintFor(address, uint256) public tokenOnly {
-        // no more TrecentoTokens can be minted after the initial mint
+        // no more OpenFundTokens can be minted after the initial mint
         assert(false);
     }
 
@@ -53,8 +53,8 @@ contract TrecentoTokenLogic is TokenLogic {
 }
 
 
-contract TrecentoToken is Token {
-    function TrecentoToken(string name_, string symbol_, address rolesContract) public Token(name_, symbol_, rolesContract) {
+contract OpenFundToken is Token {
+    function OpenFundToken(string name_, string symbol_, address rolesContract) public Token(name_, symbol_, rolesContract) {
         // you shouldn't create logic here, because this contract would be the owner.
     }
 

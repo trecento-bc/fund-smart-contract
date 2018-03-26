@@ -17,46 +17,32 @@
 let utils = require('.//utils')
 
 var TokenLogic = artifacts.require('TokenLogic')
-var TrecentoTokenLogic = artifacts.require('TrecentoTokenLogic')
-var TRC = artifacts.require('TrecentoToken')
-var TEX = artifacts.require('ExchangeToken')
+var OpenFundTokenLogic = artifacts.require('OpenFundTokenLogic')
+var TRC = artifacts.require('OpenFundToken')
 var Roles = artifacts.require('Roles')
 
 
 module.exports = function (deployer, network) {
   // logic has to be deployed separaterly because Token shouldn't be the owner of the logic
 
-  var trc,tex
   const accounts = web3.eth.accounts
   const roles = Roles.at(Roles.address)
 
   
-  function deployExchangeToken () {
-    return deployer.deploy(TEX, 'TEX', 'TEX', Roles.address)
-      .then(() => TEX.deployed())
-      .then(b => {
-        tex = b
-        return deployer.deploy(TokenLogic, tex.address, 0, Roles.address)
-      })
-      .then(() => tex.setLogic(TokenLogic.address))
-      .then(() => utils.setRole(tex, roles, 'admin'))
-      .then(() => utils.setRole(tex, roles, 'minter'))
-  }
-
   function deployTRC () {
     return deployer.deploy(TRC, 'TRC', 'TRC', Roles.address)
       .then(() => TRC.deployed())
       .then(s => {
         trc = s
         return deployer.deploy(
-          TrecentoTokenLogic, trc.address, 0, Roles.address,
+          OpenFundTokenLogic, trc.address, 0, Roles.address,
           [accounts[0], accounts[12], accounts[13], accounts[14], accounts[15]],
           [1e25, 1e25, 2e25, 3e25, 3e25])
       })
-      .then(() => trc.setLogic(TrecentoTokenLogic.address))
+      .then(() => trc.setLogic(OpenFundTokenLogic.address))
       .then(() => utils.setRole(trc, roles, 'admin'))
   }
 
-  return deployExchangeToken()
-  .then(() => deployTRC())
+  return deployTRC()
+  
 }
