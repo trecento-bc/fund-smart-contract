@@ -29,9 +29,12 @@ module.exports = function (deployer, network) {
   const roles = Roles.at(Roles.address)
 
   
+  
   function deployTRC () {
-    return deployer.deploy(TRC, 'TRC', 'TRC', Roles.address)
-      .then(() => TRC.deployed())
+     deployer.deploy(TRC, 'TRC', 'TRC', Roles.address).then(function () {
+    console.log("deployment log OpenFundToken address is", TRC.address);
+    return TRC.address;
+  	}).then(() => TRC.deployed())
       .then(s => {
         trc = s
         return deployer.deploy(
