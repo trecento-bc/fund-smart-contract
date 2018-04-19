@@ -14,7 +14,7 @@
 
 /* global web3 */
 
-let utils = require('.//utils')
+let utils = require('./utils')
 
 var TokenLogic = artifacts.require('TokenLogic')
 var OpenFundTokenLogic = artifacts.require('OpenFundTokenLogic')
@@ -44,6 +44,9 @@ module.exports = function (deployer, network) {
       })
       .then(() => trc.setLogic(OpenFundTokenLogic.address))
       .then(() => utils.setRole(trc, roles, 'admin'))
+      .then(() => utils.setRole(trc, roles, 'minter'))
+      .then(() => trc.contractHash())
+      .then(contractHash => roles.grantUserRole(contractHash, 'minter', accounts[0]))
   }
 
   return deployTRC()

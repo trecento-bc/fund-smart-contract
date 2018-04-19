@@ -41,15 +41,6 @@ contract OpenFundTokenLogic is TokenLogic {
         }
     }
 
-    function mintFor(address, uint256) public tokenOnly {
-        // no more OpenFundTokens can be minted after the initial mint
-        assert(false);
-    }
-
-    function burn(address, uint256) public tokenOnly {
-        // burning is not possible
-        assert(false);
-    }
 }
 
 
