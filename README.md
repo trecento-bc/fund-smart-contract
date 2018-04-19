@@ -34,17 +34,24 @@ NOTE: Latest Metamask has [problem](https://github.com/MetaMask/metamask-extensi
 
 ## Development
 
-Dependencies:
 
-* make
-* git
-* node
-* yarn / npm
-* truffle
+* start ganache local test Blockchain with prefilled Accounts
 
-Run the following command to setup the environment
+```
+sh runTestRpc.sh
+```
 
-    make setup-dev
+* deploy smart contracts  
+
+```
+truffle deploy
+```
+
+* test smart contracts 
+
+```
+truffle test
+```
 
 ### installing truffle
 
@@ -68,17 +75,7 @@ ln -s ~/devchain/truffle/build/cli.bundled.js truffle4
 
 ### process
 
-While development lint your code. If you editor doesn't support the solium linter then run:
-
-    make watch-linter
-
-Or if you want to lint only before commit:
-
-    make lint
-
-Make sure that you commit only tested and linted code:
-
-    make lint test
+While development lint your code (use solium linter)
 
 
 ## Code verification
