@@ -39,7 +39,7 @@ module.exports = function (deployer, network) {
         return deployer.deploy(
           OpenFundTokenLogic, trc.address, 0, Roles.address,
           [accounts[0], accounts[12], accounts[13], accounts[14], accounts[15]],
-          [1e25, 1e25, 2e25, 3e25, 3e25])
+          [0, 0, 0, 0, 0])
       })
       .then(() => trc.setLogic(OpenFundTokenLogic.address))
       .then(() => utils.setRole(trc, roles, 'admin'))
