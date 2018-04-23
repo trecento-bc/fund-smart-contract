@@ -16,7 +16,6 @@
 
 let utils = require('./utils')
 
-var TokenLogic = artifacts.require('TokenLogic')
 var OpenFundTokenLogic = artifacts.require('OpenFundTokenLogic')
 var TRC = artifacts.require('OpenFundToken')
 var Roles = artifacts.require('Roles')
