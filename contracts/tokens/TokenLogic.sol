@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.23;
 
 import "../Math.sol";
 import "../authority/Roles.sol";
@@ -22,18 +22,18 @@ import "./ERC223_receiving_contract.sol";
 
 interface TokenLogicI {
     // we have slightly different interface then ERC20, because
-    function totalSupply() public view returns (uint256 supply);
-    function balanceOf( address who ) public view returns (uint256 value);
-    function allowance( address owner, address spender ) public view returns (uint256 _allowance);
-    function transferFrom( address from, address to, uint256 value) public returns (bool ok);
+    function totalSupply() external view returns (uint256 supply);
+    function balanceOf( address who ) external view returns (uint256 value);
+    function allowance( address owner, address spender ) external view returns (uint256 _allowance);
+    function transferFrom( address from, address to, uint256 value) external returns (bool ok);
     // ERC20 assumes that msg.sender is the owner, but because logic contract is
     // behind a proxy we need to add the owner parameter.
-    function transfer( address owner, address to, uint256 value) public returns (bool ok);
-    function approve( address owner, address spender, uint256 value ) public returns (bool ok);
+    function transfer( address owner, address to, uint256 value) external returns (bool ok);
+    function approve( address owner, address spender, uint256 value ) external returns (bool ok);
 
-    function setToken(address token_) public;
-    function mintFor(address dest, uint256 wad) public;
-    function burn(address src, uint256 wad) public;
+    function setToken(address token_) external;
+    function mintFor(address dest, uint256 wad) external;
+    function burn(address src, uint256 wad) external;
 }
 
 
@@ -59,7 +59,7 @@ contract TokenLogic is TokenLogicEvents, TokenLogicI, SecuredWithRoles {
     // by default there is no need for white listing addresses, anyone can transact freely
     bool public freeTransfer = true;
 
-    function TokenLogic(
+    constructor (
         address token_,
         address tokenData_,
         address rolesContract) public SecuredWithRoles("TokenLogic", rolesContract)
@@ -91,7 +91,8 @@ contract TokenLogic is TokenLogicEvents, TokenLogicI, SecuredWithRoles {
     }
 
     function listExists(bytes32 listName) public view returns (bool) {
-        var (, ok) = indexOf(listName);
+        bool ok;
+        (, ok) = indexOf(listName);
         return ok;
     }
 
@@ -115,32 +116,34 @@ contract TokenLogic is TokenLogicEvents, TokenLogicI, SecuredWithRoles {
         require(! listExists(listName));
         require(listNames.length < 256);
         listNames.push(listName);
-        WhiteListAddition(listName);
+        emit WhiteListAddition(listName);
     }
 
     function removeWhiteList(bytes32 listName) public onlyRole("admin") {
-        var (i, ok) = indexOf(listName);
+        bool ok;
+        uint i;
+        (i, ok) = indexOf(listName);
         require(ok);
         if (i < listNames.length - 1) {
             listNames[i] = listNames[listNames.length - 1];
         }
         delete listNames[listNames.length - 1];
         --listNames.length;
-        WhiteListRemoval(listName);
+        emit WhiteListRemoval(listName);
     }
 
     function addToWhiteList(bytes32 listName, address guy) public onlyRole("userManager") {
         require(listExists(listName));
 
         whiteLists[guy][listName] = true;
-        AdditionToWhiteList(listName, guy);
+        emit AdditionToWhiteList(listName, guy);
     }
 
     function removeFromWhiteList(bytes32 listName, address guy) public onlyRole("userManager") {
         require(listExists(listName));
 
         whiteLists[guy][listName] = false;
-        RemovalFromWhiteList(listName, guy);
+        emit RemovalFromWhiteList(listName, guy);
     }
 
     function setFreeTransfer(bool isFree) public onlyOwner {

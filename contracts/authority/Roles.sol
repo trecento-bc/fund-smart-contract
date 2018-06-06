@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.23;
 
 import "./Owned.sol";
 
 
 interface SecuredWithRolesI {
-    function hasRole(string roleName) public view returns (bool);
-    function senderHasRole(string roleName) public view returns (bool);
-    function contractHash() public view returns (bytes32);
+    function hasRole(string roleName) external view returns (bool);
+    function senderHasRole(string roleName) external view returns (bool);
+    function contractHash() external view returns (bytes32);
 }
 
 
@@ -29,7 +29,7 @@ contract SecuredWithRoles is Owned {
     bytes32 public contractHash;
     bool public stopped = false;
 
-    function SecuredWithRoles(string contractName_, address roles_) public {
+    constructor (string contractName_, address roles_) public {
         contractHash = keccak256(contractName_);
         roles = RolesI(roles_);
     }
@@ -76,13 +76,13 @@ contract SecuredWithRoles is Owned {
 
 
 interface RolesI {
-    function knownRoleNames(bytes32 contractHash, bytes32 nameHash) public view returns (bool);
-    function roleList(bytes32 contractHash, bytes32 nameHash, address member) public view returns (bool);
+    function knownRoleNames(bytes32 contractHash, bytes32 nameHash) external view returns (bool);
+    function roleList(bytes32 contractHash, bytes32 nameHash, address member) external view returns (bool);
 
-    function addContractRole(bytes32 ctrct, string roleName) public;
-    function removeContractRole(bytes32 ctrct, string roleName) public;
-    function grantUserRole(bytes32 ctrct, string roleName, address user) public;
-    function revokeUserRole(bytes32 ctrct, string roleName, address user) public;
+    function addContractRole(bytes32 ctrct, string roleName) external;
+    function removeContractRole(bytes32 ctrct, string roleName) external;
+    function grantUserRole(bytes32 ctrct, string roleName, address user) external;
+    function revokeUserRole(bytes32 ctrct, string roleName, address user) external;
 }
 
 
@@ -100,29 +100,29 @@ contract Roles is RolesEvents, SecuredWithRoles {
     // the intention is
     mapping (bytes32 => mapping (bytes32 => bool)) public knownRoleNames;
 
-    function Roles() SecuredWithRoles("RolesRepository", this) public {}
+    constructor () SecuredWithRoles("RolesRepository", this) public {}
 
     function addContractRole(bytes32 ctrct, string roleName) public roleOrOwner("admin") {
         require(!knownRoleNames[ctrct][keccak256(roleName)]);
         knownRoleNames[ctrct][keccak256(roleName)] = true;
-        LogRoleAdded(ctrct, roleName);
+        emit LogRoleAdded(ctrct, roleName);
     }
 
     function removeContractRole(bytes32 ctrct, string roleName) public roleOrOwner("admin") {
         require(knownRoleNames[ctrct][keccak256(roleName)]);
         delete knownRoleNames[ctrct][keccak256(roleName)];
-        LogRoleRemoved(ctrct, roleName);
+        emit LogRoleRemoved(ctrct, roleName);
     }
 
     function grantUserRole(bytes32 ctrct, string roleName, address user) public roleOrOwner("admin") {
         require(knownRoleNames[ctrct][keccak256(roleName)]);
         roleList[ctrct][keccak256(roleName)][user] = true;
-        LogRoleGranted(ctrct, roleName, user);
+        emit LogRoleGranted(ctrct, roleName, user);
     }
 
     function revokeUserRole(bytes32 ctrct, string roleName, address user) public roleOrOwner("admin") {
         delete roleList[ctrct][keccak256(roleName)][user];
-        LogRoleRevoked(ctrct, roleName, user);
+        emit LogRoleRevoked(ctrct, roleName, user);
     }
 
 }

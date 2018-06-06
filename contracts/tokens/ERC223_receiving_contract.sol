@@ -13,7 +13,7 @@
 // limitations under the License.
 
 
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.23;
 
 
 /**
@@ -27,5 +27,5 @@ interface ERC223ReceivingContract {
      * @param wad  Amount of tokens.
      * @param _data  Transaction metadata.
      */
-    function tokenFallback(address src, uint wad, bytes _data) public;
+    function tokenFallback(address src, uint wad, bytes _data) external;
 }

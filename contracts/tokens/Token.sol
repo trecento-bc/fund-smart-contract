@@ -13,23 +13,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.23;
 
 import "../authority/Roles.sol";
 import "./TokenLogic.sol";
 
 
 interface TokenI {
-    function totalSupply() public view returns (uint256 supply);
-    function balanceOf( address who ) public  view returns (uint256 value);
-    function allowance( address owner, address spender ) public view returns (uint256 _allowance);
-    function burn( uint256 wad ) public;
-    function triggerTransfer(address src, address dst, uint256 wad) public;
-    function transfer( address to, uint256 value) public returns (bool ok);
-    function transferFrom( address from, address to, uint256 value) public returns (bool ok);
-    function approve( address spender, uint256 value ) public returns (bool ok);
+    function totalSupply() external view returns (uint256 supply);
+    function balanceOf( address who ) external  view returns (uint256 value);
+    function allowance( address owner, address spender ) external view returns (uint256 _allowance);
+    function burn( uint256 wad ) external;
+    function triggerTransfer(address src, address dst, uint256 wad) external;
+    function transfer( address to, uint256 value) external returns (bool ok);
+    function transferFrom( address from, address to, uint256 value) external returns (bool ok);
+    function approve( address spender, uint256 value ) external returns (bool ok);
 
-    function mintFor(address recipient, uint256 wad) public;
+    function mintFor(address recipient, uint256 wad) external;
 }
 
 
@@ -48,7 +48,7 @@ contract Token is TokenI, SecuredWithRoles, TokenEvents {
     uint8 public decimals = 18; // standard token precision. override to customize
     TokenLogicI public logic;
 
-    function Token(string name_, string symbol_, address rolesContract) public SecuredWithRoles(name_, rolesContract) {
+    constructor (string name_, string symbol_, address rolesContract) public SecuredWithRoles(name_, rolesContract) {
         // you can't create logic here, because this contract would be the owner.
         name = name_;
         symbol = symbol_;
@@ -72,13 +72,13 @@ contract Token is TokenI, SecuredWithRoles, TokenEvents {
     }
 
     function triggerTransfer(address src, address dst, uint256 wad) public logicOnly {
-        Transfer(src, dst, wad);
+        emit Transfer(src, dst, wad);
     }
 
     function setLogic(address logic_) public logicOnly {
         assert(logic_ != address(0));
         logic = TokenLogicI(logic_);
-        LogLogicReplaced(logic);
+        emit LogLogicReplaced(logic);
     }
 
     /**
@@ -102,7 +102,7 @@ contract Token is TokenI, SecuredWithRoles, TokenEvents {
                 receiver.tokenFallback(msg.sender, wad, empty);
             }
 
-            Transfer(msg.sender, dst, wad);
+            emit Transfer(msg.sender, dst, wad);
         }
         return retVal;
     }
@@ -121,7 +121,7 @@ contract Token is TokenI, SecuredWithRoles, TokenEvents {
                 receiver.tokenFallback(src, wad, empty);
             }
 
-            Transfer(src, dst, wad);
+            emit Transfer(src, dst, wad);
         }
         return retVal;
     }
@@ -129,7 +129,7 @@ contract Token is TokenI, SecuredWithRoles, TokenEvents {
     function approve(address guy, uint256 wad) public stoppable returns (bool) {
         bool ok = logic.approve(msg.sender, guy, wad);
         if (ok)
-            Approval(msg.sender, guy, wad);
+            emit Approval(msg.sender, guy, wad);
         return ok;
     }
 
@@ -139,13 +139,13 @@ contract Token is TokenI, SecuredWithRoles, TokenEvents {
 
     function mintFor(address recipient, uint256 wad) public stoppable onlyRole("minter") {
         logic.mintFor(recipient, wad);
-        LogMint(recipient, wad);
-        Transfer(address(0x0), recipient, wad);
+        emit LogMint(recipient, wad);
+        emit Transfer(address(0x0), recipient, wad);
     }
 
     function burn(uint256 wad) public stoppable {
         logic.burn(msg.sender, wad);
-        LogBurn(msg.sender, wad);
+        emit LogBurn(msg.sender, wad);
     }
 
     function setName(string name_) public roleOrOwner("admin") {

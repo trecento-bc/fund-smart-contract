@@ -7,7 +7,7 @@
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND (express or implied).
 
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.23;
 
 import "./Owned.sol";
 
@@ -28,19 +28,19 @@ contract AuthEvents {
 contract Auth is AuthEvents, Owned {
     Authority  public  authority;
 
-    function Auth() public {
+    constructor() public {
         owner = msg.sender;
-        LogSetOwner(msg.sender);
+        emit LogSetOwner(msg.sender);
     }
 
     function setOwner(address owner_) public auth {
         owner = owner_;
-        LogSetOwner(owner);
+        emit LogSetOwner(owner);
     }
 
     function setAuthority(Authority authority_) public auth {
         authority = authority_;
-        LogSetAuthority(authority);
+        emit LogSetAuthority(authority);
     }
 
     modifier auth {
@@ -54,7 +54,7 @@ contract Auth is AuthEvents, Owned {
         || (authority != Authority(0) && authority.canCall(src, this, sig))) {
           return true;
         }
-        UnauthorizedAccess(src, sig);
+        emit UnauthorizedAccess(src, sig);
         return false;
     }
 }

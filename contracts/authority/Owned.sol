@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.23;
 
 
 contract OwnedEvents {
@@ -23,7 +23,7 @@ contract OwnedEvents {
 contract Owned is OwnedEvents {
     address public owner;
 
-    function Owned() public {
+    constructor() public {
         owner = msg.sender;
     }
 
@@ -34,7 +34,7 @@ contract Owned is OwnedEvents {
 
     function setOwner(address owner_) public onlyOwner {
         owner = owner_;
-        LogSetOwner(owner);
+        emit LogSetOwner(owner);
     }
 
 }

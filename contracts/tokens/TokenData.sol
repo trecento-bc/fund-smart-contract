@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.23;
 
 import "../authority/Owned.sol";
 
@@ -28,7 +28,7 @@ contract TokenData is Owned {
         _;
     }
 
-    function TokenData(address logic_, address owner_) public {
+    constructor (address logic_, address owner_) public {
         logic = logic_;
         owner = owner_;
         balances[owner] = supply;
