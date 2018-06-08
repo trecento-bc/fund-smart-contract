@@ -19,7 +19,7 @@ pragma solidity ^0.4.23;
 /**
  * @title Contract that will work with ERC223 tokens.
  */
-interface ERC223ReceivingContract {
+contract ERC223ReceivingContract {
     /**
      * @dev Standard ERC223 function that will handle incoming token transfers.
      *
@@ -27,5 +27,5 @@ interface ERC223ReceivingContract {
      * @param wad  Amount of tokens.
      * @param _data  Transaction metadata.
      */
-    function tokenFallback(address src, uint wad, bytes _data) external;
+    function tokenFallback(address src, uint wad, bytes _data) public;
 }

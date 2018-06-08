@@ -17,10 +17,10 @@ pragma solidity ^0.4.23;
 import "./Owned.sol";
 
 
-interface SecuredWithRolesI {
-    function hasRole(string roleName) external view returns (bool);
-    function senderHasRole(string roleName) external view returns (bool);
-    function contractHash() external view returns (bytes32);
+contract SecuredWithRolesI {
+    function hasRole(string roleName) public view returns (bool);
+    function senderHasRole(string roleName) public view returns (bool);
+    function contractHash() public view returns (bytes32);
 }
 
 
@@ -75,14 +75,14 @@ contract SecuredWithRoles is Owned {
 }
 
 
-interface RolesI {
-    function knownRoleNames(bytes32 contractHash, bytes32 nameHash) external view returns (bool);
-    function roleList(bytes32 contractHash, bytes32 nameHash, address member) external view returns (bool);
+contract RolesI {
+    function knownRoleNames(bytes32 contractHash, bytes32 nameHash) public view returns (bool);
+    function roleList(bytes32 contractHash, bytes32 nameHash, address member) public view returns (bool);
 
-    function addContractRole(bytes32 ctrct, string roleName) external;
-    function removeContractRole(bytes32 ctrct, string roleName) external;
-    function grantUserRole(bytes32 ctrct, string roleName, address user) external;
-    function revokeUserRole(bytes32 ctrct, string roleName, address user) external;
+    function addContractRole(bytes32 ctrct, string roleName) public;
+    function removeContractRole(bytes32 ctrct, string roleName) public;
+    function grantUserRole(bytes32 ctrct, string roleName, address user) public;
+    function revokeUserRole(bytes32 ctrct, string roleName, address user) public;
 }
 
 

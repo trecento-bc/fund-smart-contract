@@ -20,20 +20,20 @@ import "./Token.sol";
 import "./TokenData.sol";
 import "./ERC223_receiving_contract.sol";
 
-interface TokenLogicI {
-    // we have slightly different interface then ERC20, because
-    function totalSupply() external view returns (uint256 supply);
-    function balanceOf( address who ) external view returns (uint256 value);
-    function allowance( address owner, address spender ) external view returns (uint256 _allowance);
-    function transferFrom( address from, address to, uint256 value) external returns (bool ok);
+contract TokenLogicI {
+    // we have slightly different contract then ERC20, because
+    function totalSupply() public view returns (uint256 supply);
+    function balanceOf( address who ) public view returns (uint256 value);
+    function allowance( address owner, address spender ) public view returns (uint256 _allowance);
+    function transferFrom( address from, address to, uint256 value) public returns (bool ok);
     // ERC20 assumes that msg.sender is the owner, but because logic contract is
     // behind a proxy we need to add the owner parameter.
-    function transfer( address owner, address to, uint256 value) external returns (bool ok);
-    function approve( address owner, address spender, uint256 value ) external returns (bool ok);
+    function transfer( address owner, address to, uint256 value) public returns (bool ok);
+    function approve( address owner, address spender, uint256 value ) public returns (bool ok);
 
-    function setToken(address token_) external;
-    function mintFor(address dest, uint256 wad) external;
-    function burn(address src, uint256 wad) external;
+    function setToken(address token_) public;
+    function mintFor(address dest, uint256 wad) public;
+    function burn(address src, uint256 wad) public;
 }
 
 
