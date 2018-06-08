@@ -13,13 +13,13 @@
 // limitations under the License.
 
 
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.23;
 
 
 /**
  * @title Contract that will work with ERC223 tokens.
  */
-interface ERC223ReceivingContract {
+contract ERC223ReceivingContract {
     /**
      * @dev Standard ERC223 function that will handle incoming token transfers.
      *

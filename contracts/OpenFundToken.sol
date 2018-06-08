@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.23;
 
 
 import "./tokens/Token.sol";
@@ -21,7 +21,7 @@ import "./tokens/TokenLogic.sol";
 
 contract OpenFundTokenLogic is TokenLogic {
 
-    function OpenFundTokenLogic(
+    constructor (
         address token_,
         address tokenData_,
         address rolesContract,
@@ -45,7 +45,7 @@ contract OpenFundTokenLogic is TokenLogic {
 
 
 contract OpenFundToken is Token {
-    function OpenFundToken(string name_, string symbol_, address rolesContract) public Token(name_, symbol_, rolesContract) {
+    constructor (string name_, string symbol_, address rolesContract) public Token(name_, symbol_, rolesContract) {
         // you shouldn't create logic here, because this contract would be the owner.
     }
 
